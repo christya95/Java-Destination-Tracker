@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Search Destination</title>
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<!-- Import the Materialize Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+
+<!-- Import fonts from Googlefonts-->
+<link
+	href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+	rel="stylesheet">
+
+<!-- Compiled and minified JavaScript -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js">
+	
+</script>
+<style>
+h1 {
+	color: #424242;
+	font-weight: bold;
+	font-family: 'Indie Flower', cursive;
+}
+
+div.input-field>label {
+	color: #424242;
+}
+
+div.input-field>i {
+	color: #311b92;
+}
+
+html {
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	background: linear-gradient(to right, #9575cd, #0097a7) 100%;
+	margin: 0px;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+</style>
+</head>
+<body>
+	<footer class="page-footer transparent">
+		<div class="container">
+			<h1 class="center-align">Search for a Destination here!</h1>
+
+			<div class="card-panel #424242 grey darken-3">
+				<table class="highlight centered">
+					<thead>
+						<tr>
+							<th>Destination Name</th>
+							<th>Duration of Stay (Days)</th>
+							<th>Went With</th>
+							<th>Year</th>
+							<th>Comment</th>
+						</tr>
+					</thead>
+					<tr th:each="destination:${searchList}">
+						<td th:text="${destination.name}">Joss</td>
+						<td th:text="${destination.duration}">10</td>
+						<td th:text="${destination.wentWith}">Pooja</td>
+						<td th:text="${destination.year}">2020</td>
+						<td th:text="${destination.comment}">Was amazing!</td>
+					</tr>
+				</table>
+			</div>
+			<div class="card-panel #bbdefb blue lighten-4">
+				<form method="post" onsubmit="reloadP()" action="#" th:action="@{/postSearchDestination}"
+					th:object="${destination}">
+					<div class=input-field>
+						<i class="material-icons prefix">date_range</i><input
+							type="number" min="1" id="year" name="year"
+							th:field="*{year}" /><br> <label for="year">Year:</label>
+					</div>
+					<br>
+
+					<button class="btn waves-effect waves-red cyan pulse" type="submit"
+						name="action" onsubmit="reloadP()">
+						Search! <i class="material-icons right">send</i>
+					</button>
+					<script type="text/javascript">
+						//Checks for the local year on computer and then sets the max attribute 
+						function getYear() {
+							var currentTime = new Date();
+							var year = currentTime.getFullYear();
+							var element = document.getElementById('year');
+							element.setAttribute('max', year);
+						}
+						//Checks to see for a second reload, not initial
+						window.onload = function() {
+							getYear();
+							var reloading = sessionStorage.getItem("reloading");
+							if (reloading) {
+								sessionStorage.removeItem("reloading");
+							}
+						}
+
+						function reloadP() {
+							sessionStorage.setItem("reloading", "true");
+							document.location.reload();
+						}
+					</script>
+				</form>
+			</div>
+			<br>
+			<div class="footer-copyright #424242 grey darken-3">
+				<div class="left-align">
+					<a href="/" class="btn btn-block waves-effect orange waves-red">Go
+						to Home<i class="material-icons right">home</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

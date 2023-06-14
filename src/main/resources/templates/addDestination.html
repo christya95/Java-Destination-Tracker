@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Destination</title>
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<!-- Import the Materialize Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+
+<!-- Import fonts from Googlefonts-->
+<link
+	href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+	rel="stylesheet">
+
+<!-- Compiled and minified JavaScript -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js">
+	
+</script>
+<style>
+h1 {
+	color: #424242;
+	font-weight: bold;
+	font-family: 'Indie Flower', cursive;
+}
+
+div.input-field>label {
+	color: #424242;
+}
+
+div.input-field>i {
+	color: #311b92;
+}
+
+html {
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+.padding {
+	padding-left: 20px;
+}
+
+body {
+	background: linear-gradient(to right, #9575cd, #0097a7) 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	margin: 0px;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+</style>
+</head>
+<body>
+	<footer class="page-footer transparent">
+		<div class="container">
+			<h1 class="center-align">Please enter the places you've
+				traveled!</h1>
+
+			<div class="card-panel #424242 grey darken-3">
+				<table class="highlight centered">
+					<thead>
+						<tr>
+							<th>Destination Name</th>
+							<th>Duration of Stay (Days)</th>
+							<th>Went With</th>
+							<th>Year</th>
+							<th>Comment</th>
+						</tr>
+					</thead>
+					<tr th:each="destination:${destinationList}">
+						<td th:text="${destination.name}">Joss</td>
+						<td th:text="${destination.duration}">10</td>
+						<td th:text="${destination.wentWith}">Pooja</td>
+						<td th:text="${destination.year}">2020</td>
+						<td th:text="${destination.comment}">Was amazing!</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div class="card-panel #bbdefb blue lighten-4">
+				<form method="post" onsubmit="reloadP()" action="#"
+					th:action="@{/postAddDestination}" th:object="${destination}">
+					<div class=input-field>
+						<i class="material-icons prefix">public</i><input type="text"
+							required id="name" name="name" th:field="*{name}" /><br> <label
+							class="padding" for="name">Destination Name:</label>
+					</div>
+					<br>
+					<div class=input-field>
+						<i class="material-icons prefix">access_time</i><input
+							type="number" required min="0" id="duration" name="duration"
+							th:field="*{duration}" /><br> <label class="padding"
+							for="duration">Duration of Stay:</label>
+					</div>
+					<br>
+					<div class=input-field>
+						<i class="material-icons prefix">people</i><input type="text"
+							id="wentWith" name="wentWith" th:field="*{wentWith}" /><br>
+						<label class="padding" for="wentWith">Went with:</label>
+					</div>
+					<br>
+					<div class=input-field>
+						<!-- Error handling is included here to avoid negative numbers, only accept numbers and max of current year -->
+						<i class="material-icons prefix">date_range</i><input
+							type="number" required min="1" id="year" name="year"
+							th:field="*{year}" /><br> <label class="padding" for="year">Year:</label>
+					</div>
+					<br>
+					<div class=input-field>
+						<i class="material-icons prefix">mode_edit</i>
+						<textarea id="comment" name="comment" th:field="*{comment}"></textarea>
+						<label class="padding" for="comment">Comment:</label> <br>
+					</div>
+					<br>
+
+					<button class="btn waves-effect waves-red cyan pulse" type="submit"
+						name="action">
+						Add Destination! <i class="material-icons right">send</i>
+					</button>
+
+					<!-- This function is to use the Materialize UI js on a button click after the first initial window load.  -->
+					<script type="text/javascript">
+						//Checks for the local year on computer and then sets the max attribute 
+						function getYear() {
+							var currentTime = new Date();
+							var year = currentTime.getFullYear();
+							var element = document.getElementById('year');
+							element.setAttribute('max', year);
+						}
+						//Sends toast for a Destination added message
+						function myFunction() {
+							M.toast({
+								html : 'Destination Added!'
+							})
+						}
+						//Checks to see for a second reload, not initial
+						window.onload = function() {
+							getYear();
+							var reloading = sessionStorage.getItem("reloading");
+							if (reloading) {
+								sessionStorage.removeItem("reloading");
+								myFunction();
+							}
+						}
+
+						function reloadP() {
+							sessionStorage.setItem("reloading", "true");
+							document.location.reload();
+						}
+					</script>
+				</form>
+			</div>
+			<br>
+			<div class="footer-copyright #424242 grey darken-3">
+				<div class="left-align">
+					<a href="/" class="btn btn-block waves-effect orange waves-red">Go
+						to Home<i class="material-icons right">home</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
